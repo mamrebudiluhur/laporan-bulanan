@@ -511,70 +511,80 @@ function checkPassword(){
 }
 </script>
 
+  // ===== DATA TABEL GOOGLE SHEET =====
 <script>
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vS8vo9uydbIuPrA_4wLc85_x7CfOxLpWBJtFhwiRWRIBu8tAm1MZCzBLbMSuKYb7t2QJqF-MRiS5zxO/pub?gid=0&single=true&output=csv")
-  .then(response => response.text())
-  .then(data => {
+.then(res => res.text())
+.then(data => {
 
-    const rows = data.trim().split("\n");
-    const headers = rows[0].split(",");
+  const rows = data.trim().split("\n").map(r => r.split(","));
+  const headers = rows[0];
 
-    const thead = document.getElementById("kehadiranHead");
-    const tbody = document.getElementById("kehadiranData");
+  const thead = document.getElementById("kehadiranHead");
+  const tbody = document.getElementById("kehadiranData");
 
-    // ===== BUAT HEADER DINAMIS =====
-    let headRow = "<tr>";
-    headers.forEach(h => {
-      headRow += `<th>${h}</th>`;
-    });
-    headRow += "<th>Total</th></tr>";
-    thead.innerHTML = headRow;
+  // ===== DETEKSI BULAN YANG ADA ISI =====
+  let activeMonthIndexes = [];
 
-    // ===== BUAT DATA =====
-    let totals = new Array(headers.length).fill(0);
+  for(let i = 2; i < headers.length; i++){
+    let hasData = rows.slice(1).some(row => parseInt(row[i]) > 0);
+    if(hasData) activeMonthIndexes.push(i);
+  }
 
-    rows.slice(1).forEach(row => {
-      const cols = row.split(",");
-      let totalRow = 0;
+  // ===== BUAT HEADER =====
+  let headHTML = "<tr><th>Sektor</th><th>Total</th>";
 
-      let tr = "<tr>";
-
-      cols.forEach((col, index) => {
-
-        if(index > 1){ // kolom angka mulai dari Jan
-          const num = parseInt(col) || 0;
-          totals[index] += num;
-          totalRow += num;
-          tr += `<td>${num}</td>`;
-        } else {
-          tr += `<td>${col}</td>`;
-        }
-
-      });
-
-      tr += `<td>${totalRow}</td></tr>`;
-      tbody.innerHTML += tr;
-    });
-
-    // ===== BARIS TOTAL =====
-    let totalHtml = `<tr style="font-weight:bold;background:#eef2ff;">`;
-    totalHtml += `<td colspan="2">Total</td>`;
-
-    let grandTotal = 0;
-
-    totals.forEach((t, i) => {
-      if(i > 1){
-        totalHtml += `<td>${t}</td>`;
-        grandTotal += t;
-      }
-    });
-
-    totalHtml += `<td>${grandTotal}</td></tr>`;
-
-    tbody.innerHTML += totalHtml;
-
+  activeMonthIndexes.forEach(i => {
+    headHTML += `<th>${headers[i]}</th>`;
   });
-</script>
 
+  headHTML += "</tr>";
+  thead.innerHTML = headHTML;
+
+  // ===== HITUNG TOTAL BULAN =====
+  let monthTotals = new Array(activeMonthIndexes.length).fill(0);
+  let grandTotal = 0;
+
+  // ===== BUAT DATA =====
+  rows.slice(1).forEach(row => {
+
+    let sektor = row[1];
+    let rowTotal = 0;
+    let rowHTML = `<tr><td>${sektor}</td>`;
+
+    activeMonthIndexes.forEach((colIndex, idx) => {
+      let val = parseInt(row[colIndex]) || 0;
+      rowTotal += val;
+      monthTotals[idx] += val;
+    });
+
+    grandTotal += rowTotal;
+
+    rowHTML += `<td style="font-weight:bold;">${rowTotal}</td>`;
+
+    activeMonthIndexes.forEach((colIndex) => {
+      let val = parseInt(row[colIndex]) || 0;
+      rowHTML += `<td>${val}</td>`;
+    });
+
+    rowHTML += "</tr>";
+    tbody.innerHTML += rowHTML;
+  });
+
+  // ===== BARIS TOTAL BAWAH =====
+  let totalRow = `<tr style="font-weight:bold;background:#eef2ff;">`;
+  totalRow += `<td>Total</td>`;
+  totalRow += `<td>${grandTotal}</td>`;
+
+  monthTotals.forEach(t => {
+    totalRow += `<td>${t}</td>`;
+  });
+
+  totalRow += "</tr>";
+
+  tbody.innerHTML += totalRow;
+
+});
+</script>
 </body>
 </html>
