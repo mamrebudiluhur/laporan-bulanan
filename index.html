@@ -406,23 +406,14 @@ footer{
 <!-- KEHADIRAN -->
 <div class="card">
   <div class="section-title">Data Kehadiran PA Mamre</div>
-  <table>
-    <tr>
-      <th>No</th><th>Sektor</th><th>Jan</th><th>Feb</th><th>Total</th>
-    </tr>
-    <tr><td>1</td><td>Jerusalem</td><td>2</td><td>9</td><td>11</td></tr>
-    <tr><td>2</td><td>Filadelfia</td><td>5</td><td>10</td><td>15</td></tr>
-    <tr><td>3</td><td>Tesalonika</td><td>5</td><td>11</td><td>16</td></tr>
-    <tr><td>4</td><td>Nasaret</td><td>8</td><td>23</td><td>31</td></tr>
-    <tr><td>5</td><td>Galatia</td><td>1</td><td>4</td><td>5</td></tr>
-    <tr><td>6</td><td>Betlehem</td><td>4</td><td>10</td><td>14</td></tr>
-    <tr><td>7</td><td>Korintus</td><td>2</td><td>5</td><td>7</td></tr>
-    <tr style="font-weight:bold;background:#eef2ff;">
-      <td colspan="2">Total</td><td>27</td><td>72</td><td>99</td>
-    </tr>
-  </table>
-</div>
 
+  <table>
+    <thead id="kehadiranHead"></thead>
+    <tbody id="kehadiranData"></tbody>
+  </table>
+
+</div>
+  
 <!-- KOORDINASI -->
 <div class="card">
   <div class="section-title">Koordinasi Kepemimpinan</div>
@@ -518,6 +509,71 @@ function checkPassword(){
     alert("Password salah!");
   }
 }
+</script>
+
+<script>
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vS8vo9uydbIuPrA_4wLc85_x7CfOxLpWBJtFhwiRWRIBu8tAm1MZCzBLbMSuKYb7t2QJqF-MRiS5zxO/pub?gid=0&single=true&output=csv")
+  .then(response => response.text())
+  .then(data => {
+
+    const rows = data.trim().split("\n");
+    const headers = rows[0].split(",");
+
+    const thead = document.getElementById("kehadiranHead");
+    const tbody = document.getElementById("kehadiranData");
+
+    // ===== BUAT HEADER DINAMIS =====
+    let headRow = "<tr>";
+    headers.forEach(h => {
+      headRow += `<th>${h}</th>`;
+    });
+    headRow += "<th>Total</th></tr>";
+    thead.innerHTML = headRow;
+
+    // ===== BUAT DATA =====
+    let totals = new Array(headers.length).fill(0);
+
+    rows.slice(1).forEach(row => {
+      const cols = row.split(",");
+      let totalRow = 0;
+
+      let tr = "<tr>";
+
+      cols.forEach((col, index) => {
+
+        if(index > 1){ // kolom angka mulai dari Jan
+          const num = parseInt(col) || 0;
+          totals[index] += num;
+          totalRow += num;
+          tr += `<td>${num}</td>`;
+        } else {
+          tr += `<td>${col}</td>`;
+        }
+
+      });
+
+      tr += `<td>${totalRow}</td></tr>`;
+      tbody.innerHTML += tr;
+    });
+
+    // ===== BARIS TOTAL =====
+    let totalHtml = `<tr style="font-weight:bold;background:#eef2ff;">`;
+    totalHtml += `<td colspan="2">Total</td>`;
+
+    let grandTotal = 0;
+
+    totals.forEach((t, i) => {
+      if(i > 1){
+        totalHtml += `<td>${t}</td>`;
+        grandTotal += t;
+      }
+    });
+
+    totalHtml += `<td>${grandTotal}</td></tr>`;
+
+    tbody.innerHTML += totalHtml;
+
+  });
 </script>
 
 </body>
