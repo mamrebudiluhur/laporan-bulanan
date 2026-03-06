@@ -514,8 +514,8 @@ function initDropdown(){
 let tahunSet = new Set();
 
 allData.forEach(r=>{
-let tgl = r[0].split("-");
-tahunSet.add(tgl[2]);
+let tahun = r[0].slice(-4);
+tahunSet.add(tahun);
 });
 
 let tahunSelect = document.getElementById("tahunSelect");
@@ -525,7 +525,6 @@ tahunSelect.innerHTML += `<option value="${t}">${t}</option>`;
 });
 
 }
-
 function loadKeuangan(){
 
 let tahun = document.getElementById("tahunSelect").value;
