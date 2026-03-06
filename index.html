@@ -486,7 +486,7 @@ Bulan:
         <th>Saldo</th>
       </tr>
     </thead>
-    <tbody id="keuanganData">
+    <tbody id="keuanganData"></tbody>
 
       <tr><td>12 Jan 2026</td><td>Perjamuan Kasih Mamre</td><td>-</td><td style="text-align:right;">425.000</td><td style="text-align:right;">2.000.000</td></tr>
       <tr><td></td><td>Kunjungan Diakonia Kel. Bulang Brayen</td><td>-</td><td style="text-align:right;">100.000</td><td style="text-align:right;">1.900.000</td></tr>
@@ -638,7 +638,7 @@ function checkPassword(){
 </script>
 
 <script>
-  // ===== DATA TABEL GOOGLE SHEET =====
+  // ===== DATA TABEL GOOGLE SHEET UNTUK KEHADIRAN =====
   fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vS8vo9uydbIuPrA_4wLc85_x7CfOxLpWBJtFhwiRWRIBu8tAm1MZCzBLbMSuKYb7t2QJqF-MRiS5zxO/pub?gid=0&single=true&output=csv")
 .then(res => res.text())
 .then(data => {
@@ -712,22 +712,6 @@ function checkPassword(){
 
 });
 </script>
-  const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQvHz3UBL9fbIbgFDDrjrIX7oa9g4zVxFYYT4l-2cWqk8JwEKjKllg0FopIpXmfNMbRaHtnY8KE-1m7/pub?gid=1733949881&single=true&output=csv";
-
-let allData = [];
-
-fetch(sheetURL)
-.then(res => res.text())
-.then(data => {
-
-const rows = data.trim().split("\n").map(r => r.split(","));
-
-rows.shift(); // hapus header
-
-allData = rows;
-
-initDropdown(); // ini yang mengisi dropdown tahun
-
-});
+  
 </body>
 </html>
