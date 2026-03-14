@@ -511,21 +511,23 @@ initDropdown();
 
 function initDropdown(){
 
+function initDropdown(){
+
 let tahunSet = new Set();
-  
+
 allData.forEach(r=>{
 let tahun = r[0].trim().slice(-4);
 tahunSet.add(tahun);
 });
 
 let tahunSelect = document.getElementById("tahunSelect");
+tahunSelect.innerHTML = "";   // reset dropdown
 
 tahunSet.forEach(t=>{
 tahunSelect.innerHTML += `<option value="${t}">${t}</option>`;
 });
 
-}
-function loadKeuangan(){
+}function loadKeuangan(){
 
 let tahun = document.getElementById("tahunSelect").value;
 let bulan = document.getElementById("bulanSelect").value;
