@@ -511,8 +511,6 @@ initDropdown();
 
 function initDropdown(){
 
-function initDropdown(){
-
 let tahunSet = new Set();
 
 allData.forEach(r=>{
@@ -521,13 +519,15 @@ tahunSet.add(tahun);
 });
 
 let tahunSelect = document.getElementById("tahunSelect");
-tahunSelect.innerHTML = "";   // reset dropdown
+tahunSelect.innerHTML = "";
 
 tahunSet.forEach(t=>{
 tahunSelect.innerHTML += `<option value="${t}">${t}</option>`;
 });
 
-}function loadKeuangan(){
+}
+
+function loadKeuangan(){
 
 let tahun = document.getElementById("tahunSelect").value;
 let bulan = document.getElementById("bulanSelect").value;
@@ -543,7 +543,7 @@ let tanggal = r[0];
 let ket = r[1];
 let masuk = parseInt((r[2] || "0").replace(/\./g,"")) || 0;
 let keluar = parseInt((r[3] || "0").replace(/\./g,"")) || 0;
-  
+
 let tahunData = tanggal.slice(-4);
 
 if(tahunData === tahun){
