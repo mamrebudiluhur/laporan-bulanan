@@ -237,6 +237,12 @@ footer{
     font-size:12px;
     font-weight:600;
     color:#1f3c88;
+    footer::after{
+  content:"Halaman " counter(page) " dari " counter(pages);
+      body {
+  counter-reset: page;
+}
+}
   }
 
   /* =========================
