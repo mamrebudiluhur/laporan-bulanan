@@ -177,64 +177,9 @@ footer{
   color:#777;
   font-size:14px;
 }
-  /* PRINT MODE */
-@media print {
-
-  body{
-    background:white;
-  }
-
-  #loginOverlay{
-    display:none !important;
-  }
-
-  header{
-    display:block !important;
-    padding:20px;
-  }
-
-  .container{
-    display:block !important;
-    margin:0;
-    padding:0;
-  }
-
-  .card{
-    box-shadow:none;
-    border:1px solid #ddd;
-    page-break-inside:avoid;
-  }
-
-  .summary-item{
-    background:#f5f5f5;
-  }
-
-  table{
-    font-size:12px;
-  }
-
-  th{
-    background:#1f3c88 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  footer{
-    margin-top:30px;
-    border-top:1px solid #ccc;
-    padding-top:10px;
-  }
-
-  button{
-    display:none;
-  }
-/* =========================
-   A4 PROFESSIONAL PRINT MODE
-========================= */
-
 @page {
   size: A4;
-  margin: 90px 40px 70px 40px;
+  margin: 100px 40px 80px 40px;
 }
 
 @media print {
@@ -261,24 +206,52 @@ footer{
     box-shadow:none;
     border:1px solid #ddd;
     page-break-inside:avoid;
+    margin-bottom:20px;
   }
 
-  /* HEADER KECIL SETIAP HALAMAN */
+  /* =========================
+     HEADER PRINT (LOGO + TITLE)
+  ========================= */
   body::before{
-    content:"Laporan Kegiatan Mamre GBKP Rg. Budi Luhur";
+    content:"";
     position:fixed;
     top:20px;
     left:40px;
     right:40px;
+    height:60px;
+
+    background-image: url('assets/logo-mamre.png');
+    background-repeat: no-repeat;
+    background-size: 40px;
+    background-position: left center;
+
+    border-bottom:1px solid #ccc;
+  }
+
+  /* TEXT HEADER */
+  body::after{
+    content:"Laporan Kegiatan Mamre GBKP Rg. Budi Luhur | Jan–Feb 2026";
+    position:fixed;
+    top:30px;
+    left:90px;
     font-size:12px;
     font-weight:600;
     color:#1f3c88;
-    border-bottom:1px solid #ccc;
-    padding-bottom:6px;
   }
 
-  /* FOOTER + NOMOR HALAMAN */
-  body::after{
+  /* =========================
+     FOOTER PRINT
+  ========================= */
+  footer::before{
+    content:"Prepared by Mamre Rg Budi Luhur";
+    position:fixed;
+    bottom:20px;
+    left:40px;
+    font-size:12px;
+    color:#555;
+  }
+
+  footer::after{
     content:"Halaman " counter(page);
     position:fixed;
     bottom:20px;
@@ -288,20 +261,31 @@ footer{
   }
 
   footer{
-    display:none;
+    display:block;
+  }
+
+  /* =========================
+     TABLE & STYLE
+  ========================= */
+  table{
+    font-size:12px;
+  }
+
+  th{
+    background:#1f3c88 !important;
+    color:white;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* GARIS PEMISAH ANTAR SECTION */
+  .card{
+    border-top:3px solid #1f3c88;
   }
 
   button{
     display:none;
   }
-
-  th{
-    background:#1f3c88 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-}
 }
   <style>
 ...CSS lain di atas...
